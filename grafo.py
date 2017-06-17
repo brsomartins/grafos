@@ -30,7 +30,7 @@ class Grafo:
 
             if len(linha_dividida) == 2: # sem peso
                 aresta = (linha_dividida[0], linha_dividida[1])
-                arestas[aresta] = None
+                arestas[aresta] = 1
             elif len(linha_dividida) == 3: # com peso
                 aresta = (linha_dividida[0], linha_dividida[1])
                 peso = linha_dividida[2]
@@ -86,7 +86,7 @@ class Grafo:
 
         arquivo.close()
 
-    def representa_grafo(self, estrutura = 'lista'):
+    def representa_grafo(self, estrutura = "lista"):
         """Representação de grafos.
 
         Sua biblioteca deve ser capaz de representar grafos utilizando tanto 
@@ -94,7 +94,27 @@ class Grafo:
         biblioteca (programa que irá usá-la) poderá escolher a representação a 
         ser utilizada.
         """
-        pass
+        if estrutura == "lista":
+            grafo = {}
+            
+            for aresta in self.arestas:
+                if aresta[0] in grafo.keys():
+                    grafo[aresta[0]].update({aresta[1]: float(self.arestas[aresta])})
+                else:
+                    grafo[aresta[0]] = {aresta[1]: float(self.arestas[aresta])}
+
+                if aresta[1] in grafo.keys():
+                    grafo[aresta[1]].update({aresta[0]: float(self.arestas[aresta])})
+                else:
+                    grafo[aresta[1]] = {aresta[0]: float(self.arestas[aresta])}
+        elif estrutura == "matriz":
+            grafo = [[]]
+
+            # for aresta in self.arestas:
+
+        # print(self.arestas)
+
+        return(grafo)
 
 def busca_grafo(grafo, busca = 'bfs', raiz = None):
     """Busca em grafos: largura e profundidade.
@@ -119,5 +139,7 @@ def descobre_componentes_conexos(grafo):
     """
     pass
 
-# print(Grafo.le_grafo('grafo_6.txt'))
-Grafo.le_grafo('grafo_2.txt').gera_arquivo()
+# print(Grafo.le_grafo('grafo_5.txt'))
+# Grafo.le_grafo('grafo_2.txt').gera_arquivo()
+# print(Grafo.le_grafo('grafo_5.txt').representa_grafo())
+print(Grafo.le_grafo('grafo_0.txt').representa_grafo("matriz"))
