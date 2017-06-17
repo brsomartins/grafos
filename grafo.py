@@ -1,51 +1,100 @@
-def le_grafo(arquivo):
-    """Entrada.
+class Grafo:
+    """Grafo"""
+    def __init__(self, quantidade_vertices, arestas):
+        self.quantidade_vertices = quantidade_vertices
+        self.arestas = arestas
 
-    A biblioteca deve ser capaz de ler um grafo a partir de um arquivo texto. 
-    O formato do grafo no arquivo será o seguinte. A primeira linha informa o 
-    número de vértices do grafo. Cada linha subsequente informa as arestas. Um 
-    exemplo de um grafo e seu respectivo arquivo texto é dado na figura 1.
-    """
-    arquivo_aberto = open(arquivo, 'r')
-    texto = arquivo_aberto.read()
-    arquivo_aberto.close()
-    linhas = texto.splitlines()
-    quantidade_vertices = linhas[0]
-    arestas = []
+    def __str__(self):
+        return "Grafo\nQuantidade de vértices: {}\nArestas: {}".format(self.
+            quantidade_vertices, self.arestas)
 
-    for linha in linhas[1:]:
-        linha_dividida = linha.split()
+    @staticmethod
+    def le_grafo(arquivo):
+        """Entrada.
 
-        if len(linha_dividida) == 2: # sem peso
-            aresta = (linha_dividida[0], linha_dividida[1])
-            arestas.append(aresta)
-        elif len(linha_dividida) == 3: # com peso
-            aresta = (linha_dividida[0], linha_dividida[1])
-            peso = linha_dividida[2]
-            arestas.append((aresta, peso))
+        A biblioteca deve ser capaz de ler um grafo a partir de um arquivo 
+        texto. O formato do grafo no arquivo será o seguinte. A primeira linha 
+        informa o número de vértices do grafo. Cada linha subsequente informa 
+        as arestas. Um exemplo de um grafo e seu respectivo arquivo texto é 
+        dado na figura 1.
+        """
+        arquivo_aberto = open(arquivo, "r")
+        texto = arquivo_aberto.read()
+        arquivo_aberto.close()
+        linhas = texto.splitlines()
+        quantidade_vertices = int(linhas[0])
+        arestas = {}
 
-    grafo = (quantidade_vertices, arestas)
-    return(grafo)
+        for linha in linhas[1:]:
+            linha_dividida = linha.split()
 
-def gera_arquivo(grafo):
-    """Saída.
-    
-    Sua biblioteca deve ser capaz de gerar um arquivo texto com as seguintes 
-    informações sobre o grafo: número de vértices, número de arestas e grau 
-    médio, e distribuição empírica do grau dos vértices. A Figura 1 ilustra o 
-    formato deste arquivo de saída para o grafo correspondente.
-    """
-    pass
+            if len(linha_dividida) == 2: # sem peso
+                aresta = (linha_dividida[0], linha_dividida[1])
+                arestas[aresta] = None
+            elif len(linha_dividida) == 3: # com peso
+                aresta = (linha_dividida[0], linha_dividida[1])
+                peso = linha_dividida[2]
+                arestas[aresta] = peso
 
-def representa_grafo(grafo, estrutura = 'lista'):
-    """Representação de grafos.
+        grafo = Grafo(quantidade_vertices, arestas)
+        return(grafo)
 
-    Sua biblioteca deve ser capaz de representar grafos utilizando tanto uma 
-    matriz de adjacência, quanto uma lista de adjacência. O usuário da 
-    biblioteca (programa que irá usá-la) poderá escolher a representação a ser 
-    utilizada.
-    """
-    pass
+    def gera_arquivo(self):
+        """Saída.
+        
+        Sua biblioteca deve ser capaz de gerar um arquivo texto com as 
+        seguintes informações sobre o grafo: número de vértices, número de 
+        arestas e grau médio, e distribuição empírica do grau dos vértices. A 
+        Figura 1 ilustra o formato deste arquivo de saída para o grafo 
+        correspondente.
+        """
+        arquivo = open("saida.txt", "w")
+        arquivo.write("# n = {}".format(self.quantidade_vertices))
+        arquivo.write("\n# m = {}".format(len(self.arestas)))
+        arquivo.write("\n# d_medio = {}".format(2 * len(self.arestas) / self.
+            quantidade_vertices))
+        vertices = {}
+
+        for aresta in self.arestas:
+            for vertice in aresta:
+                if vertice not in vertices:
+                    vertices[vertice] = 1
+                else:
+                    vertices[vertice] += 1
+
+        grau_maximo = 0
+
+        for vertice in vertices:
+            if vertices[vertice] > grau_maximo:
+                grau_maximo = vertices[vertice]
+
+        graus = {}
+        total_graus = 0
+
+        for grau in range(1, grau_maximo + 1):
+            contador = 0
+
+            for vertice in vertices:
+                if vertices[vertice] == grau:
+                    contador += 1
+                    total_graus += 1
+
+            graus[grau] = contador
+
+        for grau in range(1, grau_maximo + 1):
+            arquivo.write("\n{} {}".format(grau, graus[grau] / total_graus))
+
+        arquivo.close()
+
+    def representa_grafo(self, estrutura = 'lista'):
+        """Representação de grafos.
+
+        Sua biblioteca deve ser capaz de representar grafos utilizando tanto 
+        uma matriz de adjacência, quanto uma lista de adjacência. O usuário da 
+        biblioteca (programa que irá usá-la) poderá escolher a representação a 
+        ser utilizada.
+        """
+        pass
 
 def busca_grafo(grafo, busca = 'bfs', raiz = None):
     """Busca em grafos: largura e profundidade.
@@ -70,4 +119,5 @@ def descobre_componentes_conexos(grafo):
     """
     pass
 
-# print(le_grafo('grafo_5.txt'))
+# print(Grafo.le_grafo('grafo_6.txt'))
+Grafo.le_grafo('grafo_2.txt').gera_arquivo()
