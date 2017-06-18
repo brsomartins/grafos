@@ -23,20 +23,20 @@ class Grafo:
         arquivo_aberto.close()
         linhas = texto.splitlines()
         quantidade_vertices = int(linhas[0])
-        arestas = {}
+        arestas_pesos = {}
 
         for linha in linhas[1:]:
             linha_dividida = linha.split()
 
             if len(linha_dividida) == 2: # sem peso
                 aresta = (linha_dividida[0], linha_dividida[1])
-                arestas[aresta] = 1
+                arestas_pesos[aresta] = 1
             elif len(linha_dividida) == 3: # com peso
                 aresta = (linha_dividida[0], linha_dividida[1])
                 peso = linha_dividida[2]
-                arestas[aresta] = peso
+                arestas_pesos[aresta] = peso
 
-        grafo = Grafo(quantidade_vertices, arestas)
+        grafo = Grafo(quantidade_vertices, arestas_pesos)
         return(grafo)
 
     def gera_arquivo(self):
@@ -53,36 +53,37 @@ class Grafo:
         arquivo.write("\n# m = {}".format(len(self.arestas)))
         arquivo.write("\n# d_medio = {}".format(2 * len(self.arestas) / self.
             quantidade_vertices))
-        vertices = {}
+        vertices_graus = {}
 
         for aresta in self.arestas:
             for vertice in aresta:
-                if vertice not in vertices:
-                    vertices[vertice] = 1
+                if vertice not in vertices_graus:
+                    vertices_graus[vertice] = 1
                 else:
-                    vertices[vertice] += 1
+                    vertices_graus[vertice] += 1
 
         grau_maximo = 0
 
-        for vertice in vertices:
-            if vertices[vertice] > grau_maximo:
-                grau_maximo = vertices[vertice]
+        for vertice in vertices_graus:
+            if vertices_graus[vertice] > grau_maximo:
+                grau_maximo = vertices_graus[vertice]
 
-        graus = {}
+        graus_quantidade = {}
         total_graus = 0
 
         for grau in range(1, grau_maximo + 1):
             contador = 0
 
-            for vertice in vertices:
-                if vertices[vertice] == grau:
+            for vertice in vertices_graus:
+                if vertices_graus[vertice] == grau:
                     contador += 1
                     total_graus += 1
 
-            graus[grau] = contador
+            graus_quantidade[grau] = contador
 
         for grau in range(1, grau_maximo + 1):
-            arquivo.write("\n{} {}".format(grau, graus[grau] / total_graus))
+            arquivo.write("\n{} {}".format(grau, graus_quantidade[grau] / 
+                total_graus))
 
         arquivo.close()
 
@@ -94,21 +95,23 @@ class Grafo:
         biblioteca (programa que irá usá-la) poderá escolher a representação a 
         ser utilizada.
         """
-        if estrutura == "lista":
-            grafo = {}
-            
+        grafo = {}
+        
+        def lista():
             for aresta in self.arestas:
                 if aresta[0] in grafo.keys():
-                    grafo[aresta[0]].update({aresta[1]: float(self.arestas[aresta])})
+                    grafo[aresta[0]].update({aresta[1]: float(self.arestas[
+                        aresta])})
                 else:
                     grafo[aresta[0]] = {aresta[1]: float(self.arestas[aresta])}
 
                 if aresta[1] in grafo.keys():
-                    grafo[aresta[1]].update({aresta[0]: float(self.arestas[aresta])})
+                    grafo[aresta[1]].update({aresta[0]: float(self.arestas[
+                        aresta])})
                 else:
                     grafo[aresta[1]] = {aresta[0]: float(self.arestas[aresta])}
-        elif estrutura == "matriz":
-            grafo = {}
+
+        def matriz():
             lista = self.representa_grafo("lista")
 
             for vertice in lista:
@@ -119,7 +122,12 @@ class Grafo:
                         grafo[vertice][vertice2] = 0
                     elif vertice2 in lista[vertice]:
                         grafo[vertice][vertice2] = lista[vertice][vertice2]
-                        
+        
+        if estrutura == "lista":
+            lista()
+        elif estrutura == "matriz":
+            matriz()
+
         return(grafo)
 
 def busca_grafo(grafo, busca = 'bfs', raiz = None):
@@ -146,6 +154,6 @@ def descobre_componentes_conexos(grafo):
     pass
 
 # print(Grafo.le_grafo('grafo_5.txt'))
-# Grafo.le_grafo('grafo_2.txt').gera_arquivo()
-# print(Grafo.le_grafo('grafo_5.txt').representa_grafo("lista"))
-# print(Grafo.le_grafo('grafo_5.txt').representa_grafo("matriz"))
+# Grafo.le_grafo('grafo_5.txt').gera_arquivo()
+# print(Grafo.le_grafo('grafo_6.txt').representa_grafo("lista"))
+# print(Grafo.le_grafo('grafo_6.txt').representa_grafo("matriz"))
