@@ -86,7 +86,7 @@ class Grafo:
 
         arquivo.close()
 
-    def representa_grafo(self, estrutura = "lista"):
+    def representa_grafo(self, estrutura):
         """Representação de grafos.
 
         Sua biblioteca deve ser capaz de representar grafos utilizando tanto 
@@ -108,12 +108,18 @@ class Grafo:
                 else:
                     grafo[aresta[1]] = {aresta[0]: float(self.arestas[aresta])}
         elif estrutura == "matriz":
-            grafo = [[]]
+            grafo = {}
+            lista = self.representa_grafo("lista")
 
-            # for aresta in self.arestas:
+            for vertice in lista:
+                grafo[vertice] = {}
 
-        # print(self.arestas)
-
+                for vertice2 in lista:
+                    if vertice == vertice2 or vertice2 not in lista[vertice]:
+                        grafo[vertice][vertice2] = 0
+                    elif vertice2 in lista[vertice]:
+                        grafo[vertice][vertice2] = lista[vertice][vertice2]
+                        
         return(grafo)
 
 def busca_grafo(grafo, busca = 'bfs', raiz = None):
@@ -141,5 +147,5 @@ def descobre_componentes_conexos(grafo):
 
 # print(Grafo.le_grafo('grafo_5.txt'))
 # Grafo.le_grafo('grafo_2.txt').gera_arquivo()
-# print(Grafo.le_grafo('grafo_5.txt').representa_grafo())
-print(Grafo.le_grafo('grafo_0.txt').representa_grafo("matriz"))
+# print(Grafo.le_grafo('grafo_5.txt').representa_grafo("lista"))
+# print(Grafo.le_grafo('grafo_5.txt').representa_grafo("matriz"))
