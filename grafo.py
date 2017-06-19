@@ -1,3 +1,5 @@
+from collections import deque
+
 class Grafo:
     """Grafo"""
     def __init__(self, quantidade_vertices, arestas):
@@ -130,17 +132,54 @@ class Grafo:
 
         return(grafo)
 
-def busca_grafo(grafo, busca = 'bfs', raiz = None):
-    """Busca em grafos: largura e profundidade.
+    def busca_grafo(self, busca, raiz = None):
+        """Busca em grafos: largura e profundidade.
 
-    Sua biblioteca deve ser capaz de percorrer o grafo utilizando busca em 
-    largura e busca em profundidade. O vértice inicial será dado pelo usuário 
-    da biblioteca. A respectiva árvore de busca deve ser gerada assim como o 
-    nível de cada vértice na árvore (nível da raiz é zero). Estas informações 
-    devem ser impressas em um arquivo. Para descrever a árvore gerada, basta 
-    informar o pai de cada vértice e seu nível no arquivo de saída. 
-    """
-    pass
+        Sua biblioteca deve ser capaz de percorrer o grafo utilizando busca em 
+        largura e busca em profundidade. O vértice inicial será dado pelo 
+        usuário da biblioteca. A respectiva árvore de busca deve ser gerada 
+        assim como o nível de cada vértice na árvore (nível da raiz é zero). 
+        Estas informações devem ser impressas em um arquivo. Para descrever a 
+        árvore gerada, basta informar o pai de cada vértice e seu nível no 
+        arquivo de saída.
+        """
+        def bfs():
+            fila = deque()
+            fila.append(raiz)
+            visitado = {}
+            pai = {}
+            nivel = {}
+
+            for vertice in grafo:
+                visitado[vertice] = False
+                pai[vertice] = None
+
+            visitado[raiz] = True
+            nivel[raiz] = 0
+
+            while fila:
+                atual = fila.popleft()
+
+                for vertice in grafo[atual]:
+                    if not visitado[vertice]:
+                        visitado[vertice] = True
+                        pai[vertice] = atual
+                        nivel[vertice] = nivel[atual] + 1
+                        fila.append(vertice)
+
+            return pai, nivel
+
+        def dfs():
+            pass
+
+        grafo = self.representa_grafo("lista")
+
+        # print(grafo) # remover
+
+        if busca == "bfs":
+            return bfs()
+        elif busca == "dfs":
+            return dfs()
 
 def descobre_componentes_conexos(grafo):
     """Componentes conexos.
@@ -152,8 +191,3 @@ def descobre_componentes_conexos(grafo):
     primeiro o componente com o maior número de vértices, etc).
     """
     pass
-
-# print(Grafo.le_grafo('grafo_5.txt'))
-# Grafo.le_grafo('grafo_5.txt').gera_arquivo()
-# print(Grafo.le_grafo('grafo_6.txt').representa_grafo("lista"))
-# print(Grafo.le_grafo('grafo_6.txt').representa_grafo("matriz"))
