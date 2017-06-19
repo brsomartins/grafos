@@ -178,28 +178,40 @@ class Grafo:
                     visitado[vertice] = False
                     pai[vertice] = None
 
-                def dfsVisita(grafo, atual):
+                def dfs_visita(grafo, atual):
                     visitado[atual] = True
 
                     for vertice in grafo[atual]:
                         if not visitado[vertice]:
                             pai[vertice] = atual
                             nivel[vertice] = nivel[atual] + 1
-                            dfsVisita(grafo, vertice)
+                            dfs_visita(grafo, vertice)
 
                 for vertice in grafo:
                     if not visitado[vertice]:
                         nivel[vertice] = 0
-                        dfsVisita(grafo, vertice)
+                        dfs_visita(grafo, vertice)
 
                 return pai, nivel
 
         grafo = self.representa_grafo("lista")
 
         if busca == "bfs":
-            return bfs()
+            pai, nivel = bfs()
         elif busca == "dfs":
-            return dfs()
+            pai, nivel = dfs()
+
+        arquivo = open("saida.txt", "w")
+
+        for vertice in grafo:
+            if pai[vertice] is None:
+                arquivo.write("{}: (pai: -, nível: {})".format(vertice, nivel[
+                    vertice]))
+            else:
+                arquivo.write("\n{}: (pai: {}, nível: {})".format(vertice, pai[
+                    vertice], nivel[vertice]))
+
+        arquivo.close()
 
 def descobre_componentes_conexos(grafo):
     """Componentes conexos.
