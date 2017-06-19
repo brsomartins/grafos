@@ -170,11 +170,31 @@ class Grafo:
             return pai, nivel
 
         def dfs():
-            pass
+                visitado = {}
+                pai = {}
+                nivel = {}
+
+                for vertice in grafo:
+                    visitado[vertice] = False
+                    pai[vertice] = None
+
+                def dfsVisita(grafo, atual):
+                    visitado[atual] = True
+
+                    for vertice in grafo[atual]:
+                        if not visitado[vertice]:
+                            pai[vertice] = atual
+                            nivel[vertice] = nivel[atual] + 1
+                            dfsVisita(grafo, vertice)
+
+                for vertice in grafo:
+                    if not visitado[vertice]:
+                        nivel[vertice] = 0
+                        dfsVisita(grafo, vertice)
+
+                return pai, nivel
 
         grafo = self.representa_grafo("lista")
-
-        # print(grafo) # remover
 
         if busca == "bfs":
             return bfs()
