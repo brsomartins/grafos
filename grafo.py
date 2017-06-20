@@ -1,7 +1,7 @@
 from collections import deque
 
 class Grafo:
-    """Grafo"""
+    """Representação de um grafo por meio de suas arestas"""
     def __init__(self, quantidade_vertices, arestas):
         self.quantidade_vertices = quantidade_vertices
         self.arestas = arestas
@@ -213,13 +213,79 @@ class Grafo:
 
         arquivo.close()
 
-def descobre_componentes_conexos(grafo):
-    """Componentes conexos.
+    def descobre_componentes_conexas(self):
+        """Componentes conexas.
 
-    Sua biblioteca deve ser capaz descobrir os componentes conexos de um 
-    grafo. O número de componentes conexas, assim como o tamanho (em vértices) 
-    de cada componente e a lista de vértices pertencentes à componente. Os 
-    componentes devem estar listados em ordem decrescente de tamanho (listar 
-    primeiro o componente com o maior número de vértices, etc).
-    """
-    pass
+        Sua biblioteca deve ser capaz descobrir as componentes conexas de um 
+        grafo. O número de componentes conexas, assim como o tamanho (em 
+        vértices) de cada componente e a lista de vértices pertencentes à 
+        componente. As componentes devem estar listadas em ordem decrescente 
+        de tamanho (listar primeiro a componente com o maior número de 
+        vértices, etc).
+        """
+        grafo = self.representa_grafo("lista")
+        visitado = {}
+        componente = {}
+        contador = 1
+
+        for vertice in grafo:
+            visitado[vertice] = False
+
+        def dfs_visita(grafo, atual):
+            visitado[atual] = True
+
+            for vertice in grafo[atual]:
+                if not visitado[vertice]:
+                    dfs_visita(grafo, vertice)
+                    componente[vertice] = contador
+
+        for vertice in grafo:
+            if not visitado[vertice]:
+                componente[vertice] = contador
+                dfs_visita(grafo, vertice)
+                contador += 1
+
+        componente_quantidade = {}
+
+        for numero_componente in range(contador - 1, 0, -1):
+            total_vertices = 0
+
+            for vertice in componente:
+                if componente[vertice] == numero_componente:
+                    total_vertices += 1
+
+            componente_quantidade[numero_componente] = total_vertices
+
+        decrescente = sorted(componente_quantidade.items(), key = lambda x: x[1
+            ], reverse = True)
+        arquivo = open("saida.txt", "w")
+        arquivo.write("Quantidade de componentes conexas: {}".format(len(
+            componente_quantidade)))
+
+        for quantidade in decrescente:
+            arquivo.write("\n\nComponente {}: {} vértice(s)".format(quantidade[
+                0], quantidade[1]))
+            for vertice in sorted(componente):
+                if componente[vertice] == quantidade[0]:
+                    arquivo.write("\n * Vértice {}".format(vertice))
+
+        arquivo.close()
+
+    def calcula_distancia(self, vertice_origem, vertice_destino):
+        """Distância e caminho mínimos.
+
+        Sua biblioteca deve ser capaz de encontrar a distância entre qualquer 
+        par de vértices assim como o caminho que possui esta distância. Se o 
+        grafo não possuir pesos, o algoritmo de busca em largura deve ser 
+        utilizado. Se o grafo possuir pesos, o algoritmo de Dijkstra deve ser 
+        utilizado. Neste último caso, é necessário verificar se os pesos de 
+        todas as arestas são maiores ou iguais a zero, condição necessária 
+        para que o algoritmo de Dijkstra funcione corretamente. Você deve 
+        decidir como implementar o algoritmo de Dijkstra em sua biblioteca
+        (por exemplo, usando um heap), lembrando que isto irá influenciar o 
+        tempo de execução do seu algoritmo. Além de calcular a distância e 
+        caminho mínimo entre um par de vértices, sua biblioteca deve ser capaz 
+        de calcular a distância e caminho mínimo entre um dado vértice e todos 
+        os outros vértices do grafo. 
+        """
+        pass
