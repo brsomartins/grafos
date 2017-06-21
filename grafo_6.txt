@@ -2,6 +2,6 @@
 A B 0.1
 B E 0.2
 E C 5
-C D -9.5
+C D 3
 D E 2.3
 A E 1
