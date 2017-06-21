@@ -2,9 +2,10 @@ from collections import deque
 
 class Grafo:
     """Representação de um grafo por meio de suas arestas"""
-    def __init__(self, quantidade_vertices, arestas):
+    def __init__(self, quantidade_vertices, arestas, ponderado):
         self.quantidade_vertices = quantidade_vertices
         self.arestas = arestas
+        self.ponderado = ponderado
 
     def __str__(self):
         return "Grafo\nQuantidade de vértices: {}\nArestas: {}".format(self.
@@ -31,14 +32,16 @@ class Grafo:
             linha_dividida = linha.split()
 
             if len(linha_dividida) == 2: # sem peso
+                ponderado = False
                 aresta = (linha_dividida[0], linha_dividida[1])
                 arestas_pesos[aresta] = 1
             elif len(linha_dividida) == 3: # com peso
+                ponderado = True
                 aresta = (linha_dividida[0], linha_dividida[1])
                 peso = linha_dividida[2]
                 arestas_pesos[aresta] = peso
 
-        grafo = Grafo(quantidade_vertices, arestas_pesos)
+        grafo = Grafo(quantidade_vertices, arestas_pesos, ponderado)
         return(grafo)
 
     def gera_arquivo(self):
@@ -149,6 +152,7 @@ class Grafo:
             visitado = {}
             pai = {}
             nivel = {}
+            caminho = {}
 
             for vertice in grafo:
                 visitado[vertice] = False
@@ -156,6 +160,7 @@ class Grafo:
 
             visitado[raiz] = True
             nivel[raiz] = 0
+            caminho[raiz] = [raiz]
 
             while fila:
                 atual = fila.popleft()
@@ -212,6 +217,8 @@ class Grafo:
                     vertice], nivel[vertice]))
 
         arquivo.close()
+
+        return pai, nivel
 
     def descobre_componentes_conexas(self):
         """Componentes conexas.
@@ -271,7 +278,7 @@ class Grafo:
 
         arquivo.close()
 
-    def calcula_distancia(self, vertice_origem, vertice_destino):
+    def calcula_distancia(self, vertice_origem, vertice_destino = None):
         """Distância e caminho mínimos.
 
         Sua biblioteca deve ser capaz de encontrar a distância entre qualquer 
@@ -288,4 +295,33 @@ class Grafo:
         de calcular a distância e caminho mínimo entre um dado vértice e todos 
         os outros vértices do grafo. 
         """
-        pass
+        def bfs():
+            pai, distancia = self.busca_grafo("bfs", vertice_origem)
+            caminho = {}
+
+            def calcula_caminho(destino):
+                # path = caminho[pai[destino]]
+                # path.append(destino)
+                # return path
+                pass
+
+            print(pai)
+
+            for vertice in pai:
+                # print(pai[vertice])
+                if not pai[vertice]:
+                    caminho[vertice] = [vertice]
+                caminho[vertice] = calcula_caminho(vertice)
+
+            if not vertice_destino:
+                return distancia, caminho
+            else:
+                return distancia[vertice_destino]
+
+        def dijkstra():
+            print("Executando Dijkstra...")
+
+        if self.ponderado:
+            return dijkstra()
+        else:
+            return bfs()

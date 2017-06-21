@@ -24,4 +24,12 @@ from grafo import Grafo
 
 # Gera o arquivo "saida.txt" contendo informações sobre componentes conexas 
 # descobertas no grafo lido
-Grafo.le_grafo("grafo_8.txt").descobre_componentes_conexas()
+# Grafo.le_grafo("grafo_8.txt").descobre_componentes_conexas()
+
+# Calcula e imprime a distância entre um vértice e todos os outros de um grafo 
+# não ponderado
+print(Grafo.le_grafo("grafo_7.txt").calcula_distancia("G"))
+
+# Calcula e imprime a distância entre um vértice e outro de um grafo não
+# ponderado
+# print(Grafo.le_grafo("grafo_7.txt").calcula_distancia("G", "D"))
