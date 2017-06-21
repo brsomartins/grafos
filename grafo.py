@@ -300,23 +300,20 @@ class Grafo:
             caminho = {}
 
             def calcula_caminho(destino):
-                # path = caminho[pai[destino]]
-                # path.append(destino)
-                # return path
-                pass
+                if not pai[destino]:
+                    return [destino]
+                else:
+                    caminho = calcula_caminho(pai[destino]) + [destino]
 
-            print(pai)
+                return caminho
 
             for vertice in pai:
-                # print(pai[vertice])
-                if not pai[vertice]:
-                    caminho[vertice] = [vertice]
                 caminho[vertice] = calcula_caminho(vertice)
 
             if not vertice_destino:
                 return distancia, caminho
             else:
-                return distancia[vertice_destino]
+                return distancia[vertice_destino], caminho[vertice_destino]
 
         def dijkstra():
             print("Executando Dijkstra...")
