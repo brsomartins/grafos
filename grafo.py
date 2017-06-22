@@ -1,4 +1,6 @@
 from collections import deque
+from queue import PriorityQueue
+from math import inf
 
 class Grafo:
     """Representação de um grafo por meio de suas arestas"""
@@ -295,30 +297,50 @@ class Grafo:
         de calcular a distância e caminho mínimo entre um dado vértice e todos 
         os outros vértices do grafo. 
         """
-        def bfs():
-            pai, distancia = self.busca_grafo("bfs", vertice_origem)
-            caminho = {}
-
-            def calcula_caminho(destino):
-                if not pai[destino]:
-                    return [destino]
-                else:
-                    caminho = calcula_caminho(pai[destino]) + [destino]
-
-                return caminho
-
-            for vertice in pai:
-                caminho[vertice] = calcula_caminho(vertice)
-
-            if not vertice_destino:
-                return distancia, caminho
-            else:
-                return distancia[vertice_destino], caminho[vertice_destino]
-
         def dijkstra():
-            print("Executando Dijkstra...")
+            grafo = self.representa_grafo("lista")
+            distancia = {}
+            pai = {}
+            fila = PriorityQueue()
+
+            for vertice in grafo:
+                distancia[vertice] = inf
+                pai[vertice] = None
+                fila.put((distancia[vertice], vertice))
+
+            distancia[vertice_origem] = 0
+
+            while not fila.empty():
+                atual = fila.get()
+
+                for vertice in grafo[atual[1]]:
+                    alt = round(distancia[atual[1]] + grafo[atual[1]][vertice], 7)
+
+                    if alt < distancia[vertice]:
+                        distancia[vertice] = alt
+                        pai[vertice] = atual[1]
+
+            return pai, distancia
 
         if self.ponderado:
-            return dijkstra()
+            pai, distancia = dijkstra()
         else:
-            return bfs()
+            pai, distancia = self.busca_grafo("bfs", vertice_origem)
+
+        caminho = {}
+
+        def calcula_caminho(destino):
+            if not pai[destino]:
+                return [destino]
+            else:
+                caminho = calcula_caminho(pai[destino]) + [destino]
+
+            return caminho
+
+        for vertice in pai:
+            caminho[vertice] = calcula_caminho(vertice)
+
+        if not vertice_destino:
+            return distancia, caminho
+        else:
+            return distancia[vertice_destino], caminho[vertice_destino]
