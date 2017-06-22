@@ -26,10 +26,18 @@ from grafo import Grafo
 # descobertas no grafo lido
 # Grafo.le_grafo("grafo_8.txt").descobre_componentes_conexas()
 
-# Calcula e imprime a distância entre um vértice e todos os outros de um grafo 
-# não ponderado
-print(Grafo.le_grafo("grafo_7.txt").calcula_distancia("G"))
+# Calcula e imprime a distância e o caminho mínimo entre um vértice e todos os 
+# outros de um grafo não ponderado
+# print(Grafo.le_grafo("grafo_7.txt").calcula_distancia("G"))
 
-# Calcula e imprime a distância entre um vértice e outro de um grafo não
-# ponderado
+# Calcula e imprime a distância e o caminho mínimo entre um vértice e outro de 
+# um grafo não ponderado
 # print(Grafo.le_grafo("grafo_7.txt").calcula_distancia("G", "D"))
+
+# Calcula e imprime a distância e o caminho mínimo entre um vértice e todos os 
+# outros de um grafo ponderado
+# print(Grafo.le_grafo("grafo_6.txt").calcula_distancia("A"))
+
+# Calcula e imprime a distância e o caminho mínimo entre um vértice e outro de 
+# um grafo ponderado
+# print(Grafo.le_grafo("grafo_6.txt").calcula_distancia("A", "D"))
