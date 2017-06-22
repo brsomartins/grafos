@@ -314,7 +314,8 @@ class Grafo:
                 atual = fila.get()
 
                 for vertice in grafo[atual[1]]:
-                    alt = round(distancia[atual[1]] + grafo[atual[1]][vertice], 7)
+                    alt = round(distancia[atual[1]] + grafo[atual[1]][vertice],
+                        7)
 
                     if alt < distancia[vertice]:
                         distancia[vertice] = alt
